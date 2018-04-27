@@ -6,6 +6,8 @@ This repository contains a set of example Excel spreadsheets demonstrating the c
 
 Details on how to download and install the plugin can be found [here](https://finbourne.zendesk.com/hc/en-us/articles/360003079871-Installing-the-LUSID-Excel-Add-in).
 
+To use the add-in you will need a LUSID login which can be obtained by dropping us an [email](mailto:support@finbourne.com).
+
 | Sheet | Description |
 | --- | --- |
 | `ClientSecuritiesAndClassifications.xlsm` | Demonstrates portfolio creation, creating trades, applying classifications, viewing holdings, creating custom securities, creating analytics and portfolio aggregation |
