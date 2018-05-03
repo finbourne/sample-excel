@@ -8,7 +8,7 @@ To use the add-in you will need a LUSID login which can be obtained by dropping 
 
 | Sheet | Description |
 | --- | --- |
-| `ClientSecuritiesAndClassifications.xlsm` | Demonstrates portfolio creation, creating trades, applying classifications, viewing holdings, creating custom securities, creating analytics and portfolio aggregation |
+| `Securities, Classifications, Trades, Holdings and Aggregations.xlsm` | Demonstrates portfolio creation, creating trades, applying classifications, viewing holdings, creating custom securities, creating analytics and portfolio aggregation |
 
 ### What's missing?
 If you can't find an example for a use case you care about then please get in touch. We're eager to help expand understanding of LUSID's capabilities and learn more about users' requirements. 
