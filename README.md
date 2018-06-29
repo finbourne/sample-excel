@@ -9,6 +9,8 @@ To use the add-in you will need a LUSID login which can be obtained by dropping 
 | Sheet | Description |
 | --- | --- |
 | `Securities, Classifications, Trades, Holdings and Aggregations.xlsm` | Demonstrates portfolio creation, creating trades, applying classifications, viewing holdings, creating custom securities, creating analytics and portfolio aggregation |
+| `Drill-through.xlsm` | Demonstrates setting up and performing a drill-through into underlying fund holdings |
+| `Reconciliation.xlsm` | Demonstrates a reconciliation workflow in LUSID |
 
 ### What's missing?
 If you can't find an example for a use case you care about then please get in touch. We're eager to help expand understanding of LUSID's capabilities and learn more about users' requirements. 
