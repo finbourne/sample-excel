@@ -2,7 +2,7 @@
 
 This repository contains a set of example Excel spreadsheets demonstrating the capabilities of the LUSID platform via the LUSID Excel Add-in.
 
-Details on how to download and install the plugin can be found [here](https://finbourne.zendesk.com/hc/en-us/articles/360003079871-Installing-the-LUSID-Excel-Add-in).
+Details on how to download and install the plugin can be found [here](https://support.finbourne.com/hc/en-us/articles/360003079871-Installing-the-LUSID-Excel-Add-in).
 
 To use the add-in you will need a LUSID login which can be obtained by dropping us an [email](mailto:support@finbourne.com).
 
