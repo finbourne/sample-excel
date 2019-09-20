@@ -3,7 +3,7 @@ import unittest
 
 import lusid
 from lusid.utilities.api_client_builder import ApiClientBuilder
-from utilities.credentials_source import CredentialsSource
+from utilities import CredentialsSource
 
 
 class Scopes(unittest.TestCase):
