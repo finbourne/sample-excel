@@ -2,7 +2,6 @@ import xlwings as xw
 import unittest
 
 import lusid
-from lusid import models
 from lusid.utilities.api_client_builder import ApiClientBuilder
 from utilities.credentials_source import CredentialsSource
 from utilities.data_source import DataSource
