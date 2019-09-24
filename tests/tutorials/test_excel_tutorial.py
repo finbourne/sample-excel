@@ -17,8 +17,8 @@ def get_date(date, sht):
     return date_at
 
 
-class Scopes(unittest.TestCase):
-    # This test validates that the data displayed in "LUSID Excel -Setting up your IBOR template Global Wquity 
+class IborTemplate(unittest.TestCase):
+    # This test validates that the data displayed in "LUSID Excel -Setting up your IBOR template Global Equity
     # Fund.xlsx" is correct using the python SDK. 
 
     @classmethod
@@ -47,21 +47,15 @@ class Scopes(unittest.TestCase):
         scopes = sht.range(range_containing_scopes).value
         self.assertTrue(scopes, msg="Error loading scopes from range: " + range_containing_scopes)
 
-        excel_scopes = []
-        scopes = scopes[0:9]
-        for scope in scopes:
-            if scope:
-                excel_scopes.append(scope)
+        excel_scopes = [scope for scope in scopes[:9] if scope]
 
         # get scopes to validate against
         response = self.scopes_api.list_scopes()
-        validation_scopes = []
-        for scope_i in response.values[:9]:
-            validation_scopes.append(scope_i.scope)
+        validation_scopes = [scope_i.scope for scope_i in response.values[:9]]
 
         # Assert that the scopes from Excel == scopes from LUSID
-        self.assertEqual(excel_scopes, validation_scopes, msg="Scopes from " + book_name + "do not equal validation "
-                                                                                           "set")
+        self.assertEqual(excel_scopes, validation_scopes, msg="Scopes from " + book_name + "do not equal validation ")
+
 
     def test_view_portfolios(self):
 
@@ -87,37 +81,33 @@ class Scopes(unittest.TestCase):
         scope = sht.range(scope_location).value  # Required
         self.assertTrue(scope, msg="Error loading scope from location: " + scope_location)
 
-        portfolios_validation = []
         portfolios_response_validation = self.portfolios_api.list_portfolios_for_scope(
             scope=scope,
             effective_at=effective_at if effective_at else "",
             as_at=as_at if as_at else ""
         )
 
-        for data in portfolios_response_validation.values:
-            portfolios_validation.append(
-                {
-                    "Type": data.type,
-                    "ID Scope": data.id.scope,
-                    "ID Code": data.id.code,
-                    "DisplayName": data.display_name,
-                }
-            )
+        portfolios_validation = [
+            {
+                "Type": data.type,
+                "ID Scope": data.id.scope,
+                "ID Code": data.id.code,
+                "DisplayName": data.display_name,
+            }
+            for data in portfolios_response_validation.values
+        ]
 
         # get excel
-        portfolios_excel = []
         portfolios_response_excel = sht.range("E30", "M39").value
-        for entry in portfolios_response_excel:
-            if (entry[0] == "") or (entry[0] == None):
-                continue
-            portfolios_excel.append(
-                {
-                    "Type": entry[0],
-                    "ID Scope": entry[1],
-                    "ID Code": entry[2],
-                    "DisplayName": entry[3],
-                }
-            )
+        portfolios_excel = [
+            {
+                "Type": entry[0],
+                "ID Scope": entry[1],
+                "ID Code": entry[2],
+                "DisplayName": entry[3],
+            }
+            for entry in portfolios_response_excel if (entry[0] != "" and entry[0] != None)
+        ]
 
         # Sort data by ID
         portfolios_excel = sorted(portfolios_excel, key=lambda k: k["ID Code"])
@@ -161,39 +151,35 @@ class Scopes(unittest.TestCase):
             as_at=as_at if as_at else ""
         )
 
-        holdings_validation = []
-        for data in holdings_response.values:
-            holdings_validation.append(
-                {
-                    "InstrumentUid": data.instrument_uid,
-                    "HoldingType": data.holding_type,
-                    "Units": data.units,
-                    "SettledUnits": data.settled_units,
-                    "Cost Amount": data.cost.amount,
-                    "Cost Currency": data.cost.currency,
-                    "CostPortfolioCcy Amount": data.cost_portfolio_ccy.amount,
-                    "CostPortfolioCcy Currency": data.cost_portfolio_ccy.currency,
-                }
-            )
+        holdings_validation = [
+            {
+                "InstrumentUid": data.instrument_uid,
+                "HoldingType": data.holding_type,
+                "Units": data.units,
+                "SettledUnits": data.settled_units,
+                "Cost Amount": data.cost.amount,
+                "Cost Currency": data.cost.currency,
+                "CostPortfolioCcy Amount": data.cost_portfolio_ccy.amount,
+                "CostPortfolioCcy Currency": data.cost_portfolio_ccy.currency,
+            }
+            for data in holdings_response.values
+        ]
 
         # get holding from excel
-        holdings_excel = []
         holdings_response_excel = sht.range("E32", "L510").value
-        for entry in holdings_response_excel:
-            if (entry[0] == "") or (entry[0] == None):
-                continue
-            holdings_excel.append(
-                {
-                    "InstrumentUid": entry[0],
-                    "HoldingType": entry[1],
-                    "Units": entry[2],
-                    "SettledUnits": entry[3],
-                    "Cost Amount": entry[4],
-                    "Cost Currency": entry[5],
-                    "CostPortfolioCcy Amount": entry[6],
-                    "CostPortfolioCcy Currency": entry[7],
-                }
-            )
+        holdings_excel = [
+            {
+                "InstrumentUid": entry[0],
+                "HoldingType": entry[1],
+                "Units": entry[2],
+                "SettledUnits": entry[3],
+                "Cost Amount": entry[4],
+                "Cost Currency": entry[5],
+                "CostPortfolioCcy Amount": entry[6],
+                "CostPortfolioCcy Currency": entry[7],
+            }
+            for entry in holdings_response_excel if (entry[0] != "" and entry[0] != None)
+        ]
 
         holdings_excel = sorted(holdings_excel, key=lambda k: k["InstrumentUid"])
         holdings_validation = sorted(holdings_validation, key=lambda k: k["InstrumentUid"])
