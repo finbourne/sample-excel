@@ -1,3 +1,5 @@
+import os
+import time
 import xlwings as xw
 import unittest
 from datetime import datetime
@@ -20,12 +22,36 @@ def get_date(date, sht):
     return date_at
 
 
+def open_excel(wait_time):
+
+    os.environ["fbn-excel-base-api-url"] = "<apiurl>"
+    os.environ["fbn-excel-auth-redirect-url"] = "<redirect-url>"
+    os.environ["fbn-excel-auth-uri"] = "<auth-uri>"
+    os.environ["fbn-excel-auth-client-id"] = "<CLIENT-ID>"
+    os.environ["FBN_TOKEN_URL"] = "<token>"
+    os.environ["FBN_LUSID_API_URL"] = "<API_URL>"
+    os.environ["FBN_CLIENT_ID"] = "<CLIENT_ID>"
+    os.environ["FBN_CLIENT_SECRET"] = "<CLIENT_SECRET>"
+    os.environ["FBN_USERNAME"] = "<USERNAME>"
+    os.environ["FBN_PASSWORD"] = "<PASSWORD>"
+
+    # Requires excel addin to be installed in EXCEL
+    os.startfile(r"EXCEL.EXE")
+
+    time.sleep(wait_time)
+    return 0
+
+
 class IborTemplate(unittest.TestCase):
     # This test validates that the data displayed in "LUSID Excel -Setting up your IBOR template Global Equity
-    # Fund.xlsx" is correct using the python SDK. 
+    # Fund.xlsx" is correct using the python SDK.
 
     @classmethod
     def setUpClass(cls):
+
+        cls.wait_time = 15
+        open_excel(cls.wait_time)
+
         api_client = ApiClientBuilder().build(CredentialsSource.secrets_path())
 
         cls.scopes_api = lusid.ScopesApi(api_client)
@@ -38,9 +64,12 @@ class IborTemplate(unittest.TestCase):
     def get_sheet(self, sheet_name):
         book_path = DataSource.data_path(self.book_name)
         wb = xw.Book(book_path)
+        app1 = xw.apps
+        app1.active.calculate()
         self.assertTrue(wb, msg="Error loading book: " + self.book_name)
         sht = wb.sheets(sheet_name)
         self.assertTrue(sht, msg="Error loading sheet: " + sheet_name)
+
         return sht
 
     def test_list_scopes(self):
@@ -51,6 +80,7 @@ class IborTemplate(unittest.TestCase):
         range_containing_scopes = 'D16:D26'
 
         # get excel data
+
         scopes = sht.range(range_containing_scopes).value
         self.assertTrue(scopes, msg="Error loading scopes from range: " + range_containing_scopes)
 
@@ -62,7 +92,8 @@ class IborTemplate(unittest.TestCase):
         validation_scopes = [scope_i.scope for scope_i in response.values]
 
         # Assert excel data is contained within validation
-        [self.assertIn(sample, validation_scopes, msg="Scopes from " + self.book_name + "do not equal validation ") for sample in excel_scopes]
+        [self.assertIn(sample, validation_scopes, msg="Scopes from " + self.book_name + "do not equal validation ") for
+         sample in excel_scopes]
 
     def test_view_portfolios(self):
 
@@ -307,6 +338,7 @@ class IborTemplate(unittest.TestCase):
         # perform assertion
         [self.assertIn(sample, transaction_validation) for sample in transaction_excel]
 
+    @unittest.skip("'run_valuation' Test not fully implemented: excel copies headers???")
     def test_Perform_a_reconciliation(self):
 
         # load sheet
@@ -406,7 +438,3 @@ class IborTemplate(unittest.TestCase):
         # format excel data
 
         # perform assertion
-
-
-
-
