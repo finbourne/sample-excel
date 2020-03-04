@@ -1,4 +1,0 @@
-comtypes==1.1.7
-pytz==2019.3
-pywin32==227
-xlwings==0.18.0

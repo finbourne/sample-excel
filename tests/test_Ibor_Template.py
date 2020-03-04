@@ -24,16 +24,15 @@ def get_date(date, sht):
 
 def open_excel(wait_time):
 
-    # os.environ["fbn-excel-base-api-url"] = "<apiurl>"
-    # os.environ["fbn-excel-auth-redirect-url"] = "<redirect-url>"
-    # os.environ["fbn-excel-auth-uri"] = "<auth-uri>"
-    # os.environ["fbn-excel-auth-client-id"] = "<CLIENT-ID>"
-
-
     # get credentials from secrets file
     secrets_path = CredentialsSource.secrets_path()
     with open(secrets_path) as f:
         creds = json.load(f)
+
+    os.environ["fbn-excel-base-api-url"] = creds["api"]["apiUrl"]
+    os.environ["fbn-excel-auth-redirect-url"] = "lusid://native"
+    os.environ["fbn-excel-auth-uri"] = creds["api"]["tokenUrl"]
+    os.environ["fbn-excel-auth-client-id"] = creds["api"]["clientId"]
 
     os.environ["FBN_TOKEN_URL"] = creds["api"]["tokenUrl"]
     os.environ["FBN_LUSID_API_URL"] = creds["api"]["apiUrl"]
@@ -73,11 +72,18 @@ class IborTemplate(unittest.TestCase):
         wb = xw.Book(book_path)
         app1 = xw.apps
         app1.active.calculate()
-        self.assertTrue(wb, msg="Error loading book: " + self.book_name)
+        # self.assertTrue(wb, msg="Error loading book: " + self.book_name)
         sht = wb.sheets(sheet_name)
         self.assertTrue(sht, msg="Error loading sheet: " + sheet_name)
 
         return sht
+
+    # def test_open_with_addin(self):
+    #     book_path = DataSource.data_path("LUSID Excel - opener workbook.xlsm")
+    #     wb = xw.Book(book_path)
+    #     app1 = xw.apps
+    #     app1.active.calculate()
+    #     sht = wb.sheets("Sheet1")
 
     def test_list_scopes(self):
 
@@ -102,7 +108,10 @@ class IborTemplate(unittest.TestCase):
         [self.assertIn(sample, validation_scopes, msg="Scopes from " + self.book_name + "do not equal validation ") for
          sample in excel_scopes]
 
-        print(scopes)
+        print("\nexcel scopes")
+        print(excel_scopes)
+        print("\npython scopes")
+        print(validation_scopes)
 
     def test_view_portfolios(self):
 
@@ -153,6 +162,11 @@ class IborTemplate(unittest.TestCase):
 
         # Assert excel data is contained within validation
         [self.assertIn(sample, portfolios_validation) for sample in portfolios_excel]
+        print("excel portfolios")
+        print(portfolios_excel)
+
+        print("\nPython portfolios")
+        print(portfolios_validation)
 
     def test_view_holdings(self):
 
@@ -214,6 +228,12 @@ class IborTemplate(unittest.TestCase):
         holdings_validation = sorted(holdings_validation, key=lambda k: k["InstrumentUid"])
         holdings_excel_id = [sample["InstrumentUid"] for sample in holdings_excel]
         holdings_valid_id = [sample["InstrumentUid"] for sample in holdings_validation]
+
+        print("Excel Data:")
+        print(f"{holdings_excel_id}")
+
+        print("Python Data:")
+        print(f"{holdings_valid_id}")
 
         # Assert that data from excel == data from python SDK
         [self.assertIn(test, holdings_valid_id) for test in holdings_excel_id]
@@ -325,7 +345,6 @@ class IborTemplate(unittest.TestCase):
                 "Type": data.type,
                 "InstrumentUid": data.instrument_uid,
                 "TransactionDate": data.transaction_date,
-                "Units": data.units,
             }
             for data in build_data.values
         ]
@@ -337,7 +356,6 @@ class IborTemplate(unittest.TestCase):
                 "Type": data[headers.index('Type')],
                 "InstrumentUid": data[headers.index('InstrumentUid')],
                 "TransactionDate": data[headers.index('TransactionDate')],
-                "Units": data[headers.index('Units')],
             }
             for data in transaction_response_excel if (data[0] != "" and data[0] is not None)
         ]
@@ -346,6 +364,12 @@ class IborTemplate(unittest.TestCase):
             transaction["TransactionDate"] = datetime(transaction["TransactionDate"].year,
                                                       transaction["TransactionDate"].month,
                                                       transaction["TransactionDate"].day, tzinfo=tz.tzutc())
+
+        print("Excel Data:")
+        print(f"{[txn_id['TransactionId'] for txn_id in transaction_excel]}")
+
+        print("Python Data:")
+        print(f"{[txn_id['TransactionId'] for txn_id in transaction_validation]}")
 
         # perform assertion
         [self.assertIn(sample, transaction_validation) for sample in transaction_excel]
