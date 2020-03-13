@@ -1,3 +1,5 @@
+![LUSID_by_Finbourne](https://content.finbourne.com/LUSID_repo.png)
+
 # LUSID<sup>®</sup> Excel Samples
 
 This repository contains a set of example Excel spreadsheets demonstrating the capabilities of the LUSID platform via the LUSID Excel Add-in.
