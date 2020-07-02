@@ -260,9 +260,7 @@ class IborTemplate(unittest.TestCase):
         print(f"agg req:")
         pprint.pprint(aggregation_request)
 
-        response = self.aggregation_api.get_aggregation_by_portfolio(scope=scope,
-                                                                     code=code,
-                                                                     request=aggregation_request)
+        response = self.aggregation_api.get_aggregation(scope=scope, code=code, request=aggregation_request)
 
         for item in response.data:
             print("\t{}\t{}\t{}".format(item["Instrument/default/Name"], item["Proportion(Holding/default/PV)"],
