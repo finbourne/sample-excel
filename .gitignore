@@ -198,3 +198,6 @@ venv.bak/
 # secrets
 **/secrets*
 **/.idea/
+/.vs/slnx.sqlite
+/.vs/sample-excel/v16/TestStore/0/000.testlog
+/.vs/sample-excel/v16/.suo
