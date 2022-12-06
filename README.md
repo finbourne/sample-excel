@@ -1,4 +1,5 @@
 ![LUSID_by_Finbourne](https://content.finbourne.com/LUSID_repo.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffinbourne%2Fsample-excel.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffinbourne%2Fsample-excel?ref=badge_shield)
 
 # LUSID<sup>®</sup> Excel Samples
 
@@ -18,3 +19,7 @@ To use the add-in you will need a LUSID login which can be obtained from the web
 If you can't find an example for a use case you care about then please get in touch. We're eager to help expand understanding of LUSID's capabilities and learn more about users' requirements. 
 
 To submit a suggestion please either raise an [Issue](https://github.com/finbourne/sample-excel/issues) on this GitHub repo or [send us an email](mailto:support@finbourne.com). The more information you can provide, the better.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffinbourne%2Fsample-excel.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffinbourne%2Fsample-excel?ref=badge_large)
